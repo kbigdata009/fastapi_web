@@ -13,5 +13,4 @@ async def main(request: Request):
 
 @app.get('/hello/{name}', response_class=HTMLResponse)
 async def hello(request: Request , name):
-    words = f'당신의 이름은 {name} 이니까 반가워서 인사'
-    return templates.TemplateResponse(request=request,name="hello.html" , context={"name":words})
+    return templates.TemplateResponse(request=request,name="hello.html" , context={"name":name})
