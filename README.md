@@ -91,15 +91,20 @@ templates/index.html 파일을 생성후 다음과 같이 코드를 추가
 </html>
 ```
 
-[app.py](http://app.py) 파일을 다음과 같이 수정한다.
+[main.py](http://main.py) 파일을 다음과 같이 수정한다.
 
 ```python
-....
+from fastapi import FastAPI ,Request
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse
 
-@app.route('/')
-def index():
-    
-    return render_template('index.html')
+app = FastAPI()
+
+templates = Jinja2Templates(directory="templates")
+
+@app.get('/', response_class=HTMLResponse)
+async def main(request: Request):
+    return templates.TemplateResponse(request=request,name="index.html")
 
 ...
 ```

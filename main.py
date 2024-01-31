@@ -8,7 +8,7 @@ templates = Jinja2Templates(directory="templates")
 
 @app.get('/', response_class=HTMLResponse)
 async def main(request: Request):
-    return templates.TemplateResponse(request=request,name="index.html")
+    return templates.TemplateResponse(request=request,name="index.html" , context={"name":"김태뿅"})
 
 
 @app.get('/hello')
