@@ -203,18 +203,52 @@ templates/hello.html 파일을 생성 후 다음과 같은 코드를 추가한�
 처리하는 구현한다.
 
 
+http://127.0.0.1:8000/hello/김태경?action="훌라훌라"&sound="월월"
+
+방식은 GET방식으로 요청을 했을때 서버가 처리하는 기능을 구현하기 위해 다음과 같이 @app.get('/hello/{name}' 을 수정한다.
+
+```python
+@app.get('/hello/{name}', response_class=HTMLResponse)
+async def hello(request: Request , name ,action, sound: str = "빵빵"):
+    print(f'action :{action} 그리고 소리 :{sound} ')
+    return templates.TemplateResponse(request=request
+                                      ,name="hello.html" 
+                                      , context={"name":name 
+                                                 , "action":action
+                                                 , "sound":sound})
+```
+
+teplates/hello.html 다음과 같이 수정한다.
+
+```html
+...
+
+<body>
+    <h1 style="color: red;">{{ name }} </h1>
+    <span>{{ action }}와 같은 행동을 하고</span>
+    <span>{{ sound }}와 소리를 낸다</span>
+</body>
+
+...
+```
+
+결과는 다음과 같은 페이지가 웹페이지에 랜더링 되는것을 확인 할 수 있다.
+
+![image](https://github.com/kbigdata009/flask_web/assets/153488538/f0f5b877-c607-43c4-99b8-daedc82e6074)
+
+
 
 
 
 다음 과정은 요청 방식에 대해서 GET 방식과 POST 방식을 구분해서 받는 방법을 테스트 하기 위해
 
-url : http://localhost:5000
+url : http://localhost:8000
 
 method: GET 
 
 에서는 위와 같은 페이지가 랜더링 되고
 
-url: http://localhost:5000
+url: http://localhost:8000
 
 method : POST 
 

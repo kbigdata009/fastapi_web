@@ -1,0 +1,63 @@
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title>Ubion Registration</title> 
+	<link rel="stylesheet"
+		href="style.css"> 
+</head> 
+
+<body> 
+	<div class="main"> 
+		<h1>UBION</h1> 
+		<h3>Enter your register Info</h3>
+		<form action="/register" method="post"> 
+			<label for="first"> 
+				Username: 
+			</label> 
+			<input type="text"
+				id="first"
+				name="username"
+				placeholder="Enter your Username" required> 
+
+            <label for="first"> 
+                Email: 
+            </label> 
+            <input type="text"
+                id="first"
+                name="email"
+                placeholder="Enter your EMail" required>
+            
+            <label for="first"> 
+                PHONE: 
+            </label> 
+            <input type="text"
+                id="first"
+                name="phone"
+                placeholder="Enter your phonenumber" required>
+
+			<label for="password"> 
+				Password: 
+			</label> 
+			<input type="password"
+				id="password"
+				name="password"
+				placeholder="Enter your Password" required> 
+
+			<div class="wrap"> 
+				<button type="submit"
+						onclick="solve()"> 
+					Submit 
+				</button> 
+			</div> 
+		</form> 
+		<p>Not registered? 
+			<a href="#"
+			style="text-decoration: none;"> 
+				Create an account 
+			</a> 
+		</p> 
+	</div> 
+</body> 
+
+</html>
