@@ -246,41 +246,234 @@ url : http://localhost:8000
 
 method: GET 
 
-에서는 위와 같은 페이지가 랜더링 되고
+에서는 위와 같은 페이지가 랜더링 되고 POST 방식을 구현해 보기위해 
 
-url: http://localhost:8000
+url: http://localhost:8000/login
 
 method : POST 
 
-일때는 다음과 같은  페이지가 랜더링 되도록 하기 위해 app.py를 다음과 같이 수정한다.
+일때는 다음과 같은  페이지가 랜더링 되도록 하기 위해 main.py를 다음과 같이 수정한다.
 
 ```python
 
 ....
 
-@app.route('/' , methods=['GET','POST'])
-def index():
-    if request.method == "GET":
-        os_info = dict(request.headers)
-        print(os_info) 
-        return render_template('index.html',header=os_info )
-    
-    elif request.method == "POST":
-        return render_template('index.html',header= "안녕하세요 김태경입니다.!!!")
+@app.get('/login', response_class=HTMLResponse)
+async def login_page_view(request: Request ):
+    return templates.TemplateResponse(request=request,name="login.html")
 ...
 ```
 
- [http://localhost:500](http://localhost:500)0 으로 get방식으로 요청을 할때
+ http://localhost:500http://localhost:5000/login 으로 get방식으로 요청을 할때
 
-즉 , query로 [http://localhost:5000?name=김태경](http://localhost:5000?name=김태경)&hello=안녕하세요
+username과 password를 입력하기 위한 페이지가 랜더링 되기 위해 
 
-request 하였을때 
+templates/login.html 파일을 생성후 다음과 같이 코드를 생성한다.
 
-![image](https://github.com/kbigdata005/web_server/assets/139095086/82dd0a92-1bdc-4789-ba3e-f831ac8de359)
 
-위와 같이 나타나기 위해서 
 
-app.py를 수정한다.
+```html
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title>GeeksforGeeks Registration</title> 
+	<link rel="stylesheet"
+		href="style.css"> 
+</head> 
+
+<body> 
+	<div class="main"> 
+		<h1>GeeksforGeeks</h1> 
+		<h3>Enter your login credentials</h3> 
+		<form action="/login" method="post"> 
+			<label for="first"> 
+				Username: 
+			</label> 
+			<input type="text"
+				id="first"
+				name="username"
+				placeholder="Enter your Username" required> 
+
+			<label for="password"> 
+				Password: 
+			</label> 
+			<input type="password"
+				id="password"
+				name="password"
+				placeholder="Enter your Password" required> 
+
+			<div class="wrap"> 
+				<button type="submit"
+						onclick="solve()"> 
+					Submit 
+				</button> 
+			</div> 
+		</form> 
+		<p>Not registered? 
+			<a href="#"
+			style="text-decoration: none;"> 
+				Create an account 
+			</a> 
+		</p> 
+	</div> 
+</body> 
+
+</html>
+
+```
+
+
+
+다음과 같은 페이지가 랜더링 되는 것을 확인 할 수 있다.
+
+![image](https://github.com/kbigdata005/web_server/assets/153488538/9489acb3-734f-4a65-8f68-557fa7efe13d)
+
+위와 같이 사이트에서 username 부분과 password 부분에 해당하는 곳에 입력하고 submit 버튼을 누루면 
+
+http://127.0.0.1:8000/login 으로 POST 방식으로 입력한 데이트와 함께 request 한다. 
+
+username : moduedu@gmail , password :1234 를 입력후 Submit 버튼 클릭 
+
+이러한 요청이 들어왔을때 서버에서 처리하기 위한 코드를 아래와 같이 작성한다.
+
+main.py에 코드 추가
+
+```python
+@app.post('/login', response_class=HTMLResponse)
+async def login(username:str=Form(...) , password:str=Form(...)):
+    print(username , password)
+    return "Success"
+```
+
+
+
+클라이언트 (즉 , 요청한 웹브라우저) 에서는 다음과 "Success" 라는 글씨가 페이지에 출력 되고 콘솔창에는 다음과 같은 메세시가 출력된다.
+
+```powershell
+[32mINFO[0m:     127.0.0.1:57600 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+moduedu@gmail.com 1234
+[32mINFO[0m:     127.0.0.1:57602 - "[1mPOST /login HTTP/1.1[0m" [32m200 OK[0m
+```
+
+
+
+이러한 방식으로 
+
+http://127.0.0.1:8000/regiter 경로로 POST 방식으로 요청을 하면 처리하는 기능을 구현하기 위해
+
+다음과 같은 코드를 추가한다.
+
+
+
+main.py
+
+```python
+@app.get('/register', response_class=HTMLResponse)
+async def login_page_view(request: Request ):
+    return templates.TemplateResponse(request=request,name="register.html")
+```
+
+
+
+templatets/register.html
+
+```html
+<!DOCTYPE html> 
+<html> 
+
+<head> 
+	<title>Ubion Registration</title> 
+	<link rel="stylesheet"
+		href="style.css"> 
+</head> 
+
+<body> 
+	<div class="main"> 
+		<h1>UBION</h1> 
+		<h3>Enter your register Info</h3>
+		<form action="/register" method="post"> 
+			<label for="first"> 
+				Username: 
+			</label> 
+			<input type="text"
+				id="first"
+				name="username"
+				placeholder="Enter your Username" required> 
+
+            <label for="first"> 
+                Email: 
+            </label> 
+            <input type="text"
+                id="first"
+                name="email"
+                placeholder="Enter your EMail" required>
+            
+            <label for="first"> 
+                PHONE: 
+            </label> 
+            <input type="text"
+                id="first"
+                name="phone"
+                placeholder="Enter your phonenumber" required>
+
+			<label for="password"> 
+				Password: 
+			</label> 
+			<input type="password"
+				id="password"
+				name="password"
+				placeholder="Enter your Password" required> 
+
+			<div class="wrap"> 
+				<button type="submit"
+						onclick="solve()"> 
+					Submit 
+				</button> 
+			</div> 
+		</form> 
+		<p>Not registered? 
+			<a href="#"
+			style="text-decoration: none;"> 
+				Create an account 
+			</a> 
+		</p> 
+	</div> 
+</body> 
+
+</html>
+
+```
+
+
+
+main.py
+
+```python
+@app.post('/register', response_class=HTMLResponse)
+async def login(username:str=Form(...) ,
+                email:str=Form(...),
+                phone:str=Form(...),
+                password:str=Form(...)):
+    print(username , password)
+    return email
+```
+
+다음은 위와 같은 코드를 진행한 후 모습이다.
+
+ 
+
+![image-20240201160736963](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20240201160736963.png)
+
+Submit 버튼 클릭시 다음과 같은 페이지가 랜더링 된다.
+
+![image-20240201160837094](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20240201160837094.png)
+
+
+
+
+
+main.py를 수정한다.
 
 ```python
 ...
