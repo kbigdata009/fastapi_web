@@ -114,7 +114,6 @@ jinja2 문법과 데이터를 연결하는 방법을 알아 보기 위해서
 app.py의 @app.route(’/’)을 다음과 같이 수정한다.
 
 ```python
-
 ...
 
 from fastapi import FastAPI ,Request
@@ -171,7 +170,6 @@ method: GET
 main.py 부분에 다음과 같은 코드를 추가한다.
 
 ```python
-
 ....
 
 @app.get('/hello/{name}', response_class=HTMLResponse)
@@ -255,7 +253,6 @@ method : POST
 일때는 다음과 같은  페이지가 랜더링 되도록 하기 위해 main.py를 다음과 같이 수정한다.
 
 ```python
-
 ....
 
 @app.get('/login', response_class=HTMLResponse)
@@ -630,7 +627,6 @@ index.html을 다음과 같이 수정한다.
 위와 같은 기능을 구현하기 위하여 app.py를 다음과 같이 코드를 추가한다.
 
 ```python
-
 ...
 
 @app.route('/list', methods=['GET' , 'POST'])
