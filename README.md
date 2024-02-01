@@ -460,11 +460,11 @@ async def login(username:str=Form(...) ,
 
  
 
-![image-20240201160736963](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20240201160736963.png)
+![image-20240201160736963](https://github.com/kbigdata005/web_server/assets/153488538/fa9616c1-4397-4029-8b58-99d7f11828b9)
 
 Submit 버튼 클릭시 다음과 같은 페이지가 랜더링 된다.
 
-![image-20240201160837094](C:\Users\user\AppData\Roaming\Typora\typora-user-images\image-20240201160837094.png)
+![image-20240201160837094](https://github.com/kbigdata005/web_server/assets/153488538/c1f0e9f3-e7aa-4890-80b0-d160623e0e5b)
 
 
 
