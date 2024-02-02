@@ -468,6 +468,103 @@ Submit 버튼 클릭시 다음과 같은 페이지가 랜더링 된다.
 
 
 
+#### DataBase에 저장, 편집 등 기능 구현
+
+DB를 활용하기 위하여 전에 구현하였던 회원가입과 로그인 코드를 활용하여 MongoDB에 저장하고 조회하는 기능을 구현한다.
+
+(mongoDB는 cloud기반에 원격에 data 를 저장할 수 있는 계층형 DB로서 [MONOGDB](https://www.mongodb.com/ko-kr) 여기로 회원가입과 함께 database를 구축해야 한다. )
+
+회원가입페이지에서 username, email, phone,password 를 입력하고 post 방식으로 http://localhost:8000/register 경로로 입력한
+
+데이터와 함께 요청을 보냈을때 서버에서 username, email, phone,password 의 내용을 mongodb에 저장한다.
+
+1. post 방식으로 http://localhost:8000/register 요청이 들어 왔을때 실행되기 위한 데코레이터 
+
+   ```python
+   @app.post('/register',  response_class=HTMLResponse)
+   ```
+
+2. 기능구현을 위한 함수를 만들고 , 전달받은 데이터를 각각의 변수에 따로 저장한다.
+
+   ```python
+   async def register(request: Request, username:str=Form(...) ,
+                   email:str=Form(...),
+                   phone:str=Form(...),
+                   password:str=Form(...)):
+   ```
+
+3. mongodb의 'ubion' schema에 users 라는 collection에 저장한다.
+
+   ```python
+   from pymongo import MongoClient
+   ...
+   
+   #mongodb connect
+   mongodb_URI = "mongodb+srv://식으로 시작하는  mongodb 접속 주소"
+   client = MongoClient(mongodb_URI)
+   
+   db = client.ubion
+   
+   ...
+   @app.post('/register',  response_class=HTMLResponse)
+   async def register(request: Request, username:str=Form(...) ,
+                   email:str=Form(...),
+                   phone:str=Form(...),
+                   password:str=Form(...)):
+       
+       users = db.users
+       user = users.find_one({"email":email})
+       if user == None:
+           hashed_pw = pbkdf2_sha256.hash(password+salt)
+           result = users.insert_one({
+               "username":username,
+               "email":email,
+               "phone":phone,
+               "password":hashed_pw
+           })
+   
+           print(result)
+           return templates.TemplateResponse(request=request,name="login.html" )
+   
+       else:
+           return templates.TemplateResponse(request=request,name="register.html" )
+       
+      
+   ```
+
+4. 가입하면서 작성한 항목 중에 email 을 중복되지 않게 하기위해 가입한 이메일이 있으면 다시 회원가입창을 보이게 하고 
+
+   이메일이 중복이 되지 않으면 mongoDB에  저장하고 login.html이 랜더링 되도록 한다.
+
+
+
+5. Login 기능 구현 
+
+   로그인 페이지에서 email 과 password를 전달받아 서버에서 mongodb의 ubion 디비의 users 콜랙션에서 입력받은 email 로 조회하고 조회한 email 없으면 회원가입창으로 이동하고 만들고 , 
+
+   조회한 이메일이 있을때 입력받은 password와 database 에 조회한 password가 같으면 http://localhost:8000 으로 넘어가게 하고 비밀번호가 틀리면  다시 로그인 창으로 돌아 가도록 한다.
+
+   main.py 를 다음과 같은 코드를 추가한다.
+
+   ```python
+   @app.post('/login', response_class=HTMLResponse)
+   async def login(request: Request, email:str=Form(...) , password:str=Form(...)):
+       user = db.users
+       user = user.find_one({"email":email })
+       if user == None:
+           return templates.TemplateResponse(request=request,name="register.html")
+       else:
+           result = pbkdf2_sha256.verify(password+salt, user['password'] )
+           if result:
+               return templates.TemplateResponse(request=request,name="index.html")
+           else:
+               return templates.TemplateResponse(request=request,name="login.html")
+   ```
+
+   
+
+
+
 
 
 main.py를 수정한다.
@@ -492,6 +589,10 @@ def index():
 이번에는 GET 방식의 아닌 POST 방식으로 form 데이터 형식으로 일정한 데이터를 보내기위해서
 
 index.html 에 다음과 같이 코드를 변경한다.
+
+
+
+
 
 ```html
 <!DOCTYPE html>
@@ -520,6 +621,16 @@ index.html 에 다음과 같이 코드를 변경한다.
 </body>
 </html>
 ```
+
+
+
+
+
+
+
+
+
+
 
 제출 버튼을 눌렀을때 console 창에 ‘인사할 내용’부분에 적었던 내용이 잘 나오는지 확인한다.
 
