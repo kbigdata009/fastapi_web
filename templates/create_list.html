@@ -1,58 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends "layout_list.html" %}
+{% block body %}  
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+           <!-- Begin Page Content -->
+           <div class="container">
+           <div class="container-fluid">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-    <title>Create</title>
-    <style>
-        p {
-            width: 100%;
-        }
-    </style>
+            <!-- Page Heading -->
+            <h1 class="h3 mb-2 text-gray-800">게시판</h1>
+            <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                For more information about DataTables, please visit the <a target="_blank"
+                    href="https://datatables.net">official DataTables documentation</a>.</p>
 
-</head>
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">게시판 작성</h6>
+                </div>
+                <div class="card-body">
+                    <form action="/create_list" method="post">
+                       title :  <input type="text" name="title" placeholder="title"><br>
+                       desc  : <textarea name="desc" id="" cols="30" rows="10"></textarea><br>
+                       author : <input type="text" name="author" placeholder="author"><br>
+                       <input type="submit" value="제출">
 
-<body>
-    <div class="container">
-
-
-        <form action="/create_list" method="post">
-            <!-- 2 column grid layout with text inputs for the first and last names -->
-            <div class="row mb-4" style="margin-top: 3rem;">
-                <div class="alert alert-success" role="alert">
-                    <h4 class="alert-heading">글 작성</h4>
-                    <p>아래 형식에 맞게 글을 작성하시오.</p>
-                    <hr>
-                    <p class="mb-0">Whenever you need to, be sure to use margin utilities to keep things nice and tidy.
-                    </p>
+                    </form>
                 </div>
             </div>
 
-            <!-- Text input -->
-            <div class="form-outline mb-4">
-                <input type="text" name="title" id="form6Example3" class="form-control" />
-                <label class="form-label" for="form6Example3">Title</label>
-            </div>
-
-            <!-- Message input -->
-            <div class="form-outline mb-4">
-                <textarea class="form-control" name="desc" id="form6Example7" rows="4"></textarea>
-                <label class="form-label" for="form6Example7">Description</label>
-            </div>
-
-            <div class="form-outline mb-4">
-                <input type="text" name="author" id="form6Example3" class="form-control" placeholder="Write your username">
-                <label class="form-label" for="form6Example3">Author</label>
-            </div>
-
-
-            <!-- Submit button -->
-            <button type="submit" class="btn btn-primary btn-block mb-4">Submit</button>
-        </form>
+        </div>
     </div>
+        <!-- /.container-fluid -->
+        </header>
    
-</body>
-
-</html>
+{% endblock %}
+ 
+        

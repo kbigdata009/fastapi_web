@@ -1,63 +1,85 @@
-<!DOCTYPE html> 
-<html> 
 
-<head> 
-	<title>Ubion Registration</title> 
-	<link rel="stylesheet"
-		href="style.css"> 
-</head> 
+{% extends "layout.html" %}
+{% block body %} 
+<!-- Masthead-->
+<header class="masthead bg-primary text-white text-center">
+<!-- <h1>Login!!</h1>
+                <form action="/login" method="post">
+                    <label for="email">Enter your ID: </label>
+                    <input type="email" name="email" id="email" placeholder="write your email" required />
+                    </div>
+                    <div>
+                        <label for="email">Enter your password: </label>
+                        <input type="password" name="password" id="email" placeholder="write your password" required />
+                    </div>
+                    <div>
+                    <input type="submit" value="Login" />
+                    </div>
+                </form> -->
+<div class="container">
+	<div class="row justify-content-center">
+		<div class="col-md-6 text-center mb-5">
+			<h2 class="heading-section">Sign Up</h2>
+		</div>
+	</div>
+	<div class="row justify-content-center" >
+		<div class="col-md-12 col-lg-10" >
+			<div style="background-color: #007bff;" class="wrap d-md-flex"  >
+				<div  class="text-wrap p-4 p-lg-5 text-center d-flex align-items-center order-md-last" >
+					<div class="text w-100">
+						<h2>Welcome to Join</h2>
+						<p>
+							Are U Already Sign Up?
+						</p>
+						<a href="/login" class="btn btn-white btn-outline-white">Sign In</a>
+					</div>
+				</div>
+				<div class="login-wrap p-4 p-lg-5">
+					<div class="d-flex">
+						<div class="w-100">
+							<h3 class="mb-4">Sign Up</h3>
+						</div>
+						<div class="w-100">
+							<p class="social-media d-flex justify-content-end">
+								<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-facebook"></span></a>
+								<a href="#" class="social-icon d-flex align-items-center justify-content-center"><span class="fa fa-twitter"></span></a>
+							</p>
+						</div>
+					</div>
+					<form action="/register" method="post" class="signin-form">
+						<div class="form-group mb-3">
+							<label class="label" for="name">Username</label>
+							<input type="text" name="username" class="form-control" placeholder="write your username" required>
+						</div>
+						<div class="form-group mb-3">
+							<label class="label" for="name">Email</label>
+							<input type="text" name="email" class="form-control" placeholder="write your email" required>
+						</div>
 
-<body> 
-	<div class="main"> 
-		<h1>UBION</h1> 
-		<h3>Enter your register Info</h3>
-		<form action="/register" method="post"> 
-			<label for="first"> 
-				Username: 
-			</label> 
-			<input type="text"
-				id="first"
-				name="username"
-				placeholder="Enter your Username" required> 
-
-            <label for="first"> 
-                Email: 
-            </label> 
-            <input type="text"
-                id="first"
-                name="email"
-                placeholder="Enter your EMail" required>
-            
-            <label for="first"> 
-                PHONE: 
-            </label> 
-            <input type="text"
-                id="first"
-                name="phone"
-                placeholder="Enter your phonenumber" required>
-
-			<label for="password"> 
-				Password: 
-			</label> 
-			<input type="password"
-				id="password"
-				name="password"
-				placeholder="Enter your Password" required> 
-
-			<div class="wrap"> 
-				<button type="submit"
-						onclick="solve()"> 
-					Submit 
-				</button> 
-			</div> 
-		</form> 
-		<p>Already registered? 
-			<a href="/login"
-			style="text-decoration: none;"> 
-				Go to Login
-			</a> 
-		</p> 
-	</div> 
-</body> 
-
-</html>
+						<div class="form-group mb-3">
+							<label class="label" for="phone">PHONE NUMBER</label>
+							<input type="text" name="phone" class="form-control" placeholder="write your email" required>
+						</div>
+						<div class="form-group mb-3">
+							<label class="label" for="password">Password</label>
+							<input type="password" name="password" class="form-control" placeholder="write your Password" required>
+						</div>
+						<div class="form-group">
+							<button type="submit" class="form-control btn btn-primary submit px-3">Sign Up</button>
+						</div>
+						<div class="form-group d-md-flex">
+							<div class="w-50 text-left">
+								<label class="checkbox-wrap checkbox-primary mb-0">Remember Me <input type="checkbox" checked>
+								<span class="checkmark"></span>
+								</label>
+							</div>
+							
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</header>
+{% endblock %}

@@ -1,22 +1,72 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>LIST PAGE</h1>
-    
-    {% for data in list %} 
-        <ul>
-            <li>ID : {{ data['id'] }} </li>
-            <li>TITLE : {{ data['title'] }}</li>
-            <li>DESCRIPTION : {{ data['desc'] }}</li>
-            <li>AUTHOR : {{ data['author'] }}</li>
-            <li>TIME : {{ data['create_at'] }}</li>
-        </ul>
-    {% endfor %}
+{% extends "layout_list.html" %}
+{% block body %}  
+        <!-- Masthead-->
+        <header class="masthead bg-primary text-white text-center">
+           <!-- Begin Page Content -->
+           <div class="container">
+           <div class="container-fluid">
 
-</body>
-</html>
+            <!-- Page Heading -->
+            <h1 class="h3 mb-2 text-gray-800">게시판</h1>
+            <p class="mb-4">DataTables is a third party plugin that is used to generate the demo table below.
+                For more information about DataTables, please visit the <a target="_blank"
+                    href="https://datatables.net">official DataTables documentation</a>.</p>
+
+            <!-- DataTales Example -->
+            <div class="card shadow mb-4">
+                <div class="card-header py-3">
+                    <h6 class="m-0 font-weight-bold text-primary">게시판 리스트</h6>
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>TITLE</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>AUTHOR</th>
+                                    <th>기타</th>
+                                </tr>
+                            </thead>
+                            <tfoot>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>TITLE</th>
+                                    <th>DESCRIPTION</th>
+                                    <th>AUTHOR</th>
+                                    <th>기타</th>
+                                </tr>
+                            </tfoot>
+                            <tbody>
+                                {% for data in list %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td><a href="/detail/{{ data['_id'] }}">{{ data['title'] }}</a> </td>
+                                    <td>{{ data['desc'] }}</td>
+                                    <td> {{ data['author'] }}</td>
+                                    <td> 
+                                        <a href="/edit/{{ data['_id'] }}"><button class="btn btn-success">Edit</button></a>
+                                        <a href="/delete/{{data['_id'] }}"><button class="btn btn-danger" onclick="return confirm('정말 삭제 하시겠습니까?')">Delete</button></a>
+
+                                    </td>
+                                    
+                                </tr>
+                                {% endfor %}
+                               
+                                
+                            </tbody>
+                        </table>
+                        <a href="/create_list"><button class="btn-primary">Write</button></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+        <!-- /.container-fluid -->
+        </header>
+   
+{% endblock %}
+ 
+        

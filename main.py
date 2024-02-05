@@ -5,9 +5,12 @@ from pymongo import MongoClient
 from fastapi.responses import RedirectResponse
 from passlib.hash import pbkdf2_sha256
 from data import Articles
-
+from bson.objectid import ObjectId
+from fastapi.staticfiles import StaticFiles
+from fastapi import status
 app = FastAPI()
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
 #mongodb connect
 mongodb_URI = "mongodb+srv://root:1234@ubion9.fcwrafy.mongodb.net/?retryWrites=true&w=majority"
 client = MongoClient(mongodb_URI)
@@ -40,13 +43,13 @@ async def login(request: Request, email:str=Form(...) , password:str=Form(...)):
     user = db.users
     user = user.find_one({"email":email })
     if user == None:
-        return templates.TemplateResponse(request=request,name="register.html")
+        return RedirectResponse(url="/register",status_code=status.HTTP_303_SEE_OTHER)
     else:
         result = pbkdf2_sha256.verify(password+salt, user['password'] )
         if result:
-            return templates.TemplateResponse(request=request,name="index.html")
+            return RedirectResponse(url="/",status_code=status.HTTP_303_SEE_OTHER)
         else:
-            return templates.TemplateResponse(request=request,name="login.html")
+            return RedirectResponse(url="/login",status_code=status.HTTP_303_SEE_OTHER)
     
 
 @app.get('/register', response_class=HTMLResponse)
@@ -70,19 +73,23 @@ async def login(request: Request, username:str=Form(...) ,
         })
 
         print(result)
-        return templates.TemplateResponse(request=request,name="login.html" )
+        redirect_url = request.url_for('login')
+        return RedirectResponse(redirect_url, status_code=status.HTTP_302_FOUND)
 
     else:
         return templates.TemplateResponse(request=request,name="register.html" )
-
+import asyncio
 @app.get('/list', response_class=HTMLResponse)
 async def list(request: Request):
     # results = Articles()
+    result_list = []
     lists = db.lists
-    results = lists.find()
-    print(results)
-    # return templates.TemplateResponse(request=request,name="list.html" , context={"list":results})
-    return
+    results  = lists.find()
+    # print(results)
+    for i in results:
+        result_list.append(i)
+    return templates.TemplateResponse(request=request,name="list.html" , context={"list":result_list})
+    
 
 @app.get('/create_list' , response_class=HTMLResponse)
 async def create_list(request: Request):
@@ -104,4 +111,47 @@ async def create(request: Request ,
             "create_at":datetime.datetime.now()
         })
     print(result)
-    return "SUCESS"
+    return RedirectResponse(url="/list",status_code=status.HTTP_303_SEE_OTHER)
+
+@app.get('/detail/{id}' , response_class=HTMLResponse)
+async def details(request: Request , id):
+    lists = db.lists
+    result = lists.find_one({"_id":ObjectId(id)})
+    print(result)
+    return templates.TemplateResponse(request=request,name="detail.html" , context={"detail": result})
+
+@app.get('/edit/{id}' , response_class=HTMLResponse)
+async def details(request: Request , id):
+    lists = db.lists
+    result = lists.find_one({"_id":ObjectId(id)})
+    print(result)
+    return templates.TemplateResponse(request=request,name="edit.html" , context={"data": result})
+
+
+@app.post('/edit/{id}', response_class=HTMLResponse)
+async def create(request: Request , 
+                 id,
+                 title:str=Form(...),
+                 desc:str=Form(...),
+                 author:str=Form(...),
+                 ):
+    lists = db.lists
+    lists.update_one(
+            {'_id' : ObjectId(id)},
+            {"$set": {
+                "title":title,
+                "desc" : desc,
+                "author":author
+            }},
+            upsert=False
+
+            )
+    redirect_url = request.url_for('list')
+    return RedirectResponse(redirect_url, status_code=status.HTTP_302_FOUND)
+
+@app.get('/delete/{id}')
+def delete(request:Request , id):
+    lists = db.lists
+    lists.delete_one({"_id": ObjectId(id) })
+    redirect_url = request.url_for('list')
+    return RedirectResponse(redirect_url, status_code=status.HTTP_302_FOUND)
