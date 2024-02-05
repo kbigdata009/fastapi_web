@@ -506,6 +506,7 @@ DB를 활용하기 위하여 전에 구현하였던 회원가입과 로그인 �
    db = client.ubion
    
    ...
+   
    @app.post('/register',  response_class=HTMLResponse)
    async def register(request: Request, username:str=Form(...) ,
                    email:str=Form(...),

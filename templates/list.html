@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>LIST PAGE</h1>
+    
+    {% for data in list %} 
+        <ul>
+            <li>ID : {{ data['id'] }} </li>
+            <li>TITLE : {{ data['title'] }}</li>
+            <li>DESCRIPTION : {{ data['desc'] }}</li>
+            <li>AUTHOR : {{ data['author'] }}</li>
+            <li>TIME : {{ data['create_at'] }}</li>
+        </ul>
+    {% endfor %}
+
+</body>
+</html>

@@ -4,6 +4,7 @@ from fastapi.responses import HTMLResponse
 from pymongo import MongoClient
 from fastapi.responses import RedirectResponse
 from passlib.hash import pbkdf2_sha256
+from data import Articles
 
 app = FastAPI()
 
@@ -74,3 +75,33 @@ async def login(request: Request, username:str=Form(...) ,
     else:
         return templates.TemplateResponse(request=request,name="register.html" )
 
+@app.get('/list', response_class=HTMLResponse)
+async def list(request: Request):
+    # results = Articles()
+    lists = db.lists
+    results = lists.find()
+    print(results)
+    # return templates.TemplateResponse(request=request,name="list.html" , context={"list":results})
+    return
+
+@app.get('/create_list' , response_class=HTMLResponse)
+async def create_list(request: Request):
+    return templates.TemplateResponse(request=request,name="create_list.html")
+
+import datetime
+
+@app.post('/create_list', response_class=HTMLResponse)
+async def create(request: Request ,
+                 title:str=Form(...),
+                 desc:str=Form(...),
+                 author:str=Form(...),
+                 ):
+    lists = db.lists
+    result = lists.insert_one({
+            "title":title,
+            "desc":desc,
+            "author":author,
+            "create_at":datetime.datetime.now()
+        })
+    print(result)
+    return "SUCESS"
